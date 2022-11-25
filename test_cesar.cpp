@@ -5,9 +5,7 @@ using namespace std;
 int main()
 {
 
-    crypter('CRYPTOGRAPHIE','1');
-    crypter('CRYPTOLOGIE','1');
-    crypter('CRYPT ANALYSE','100');
+  cout<<(int)(♣♦¶)<<endl;
 
    
     return 0;

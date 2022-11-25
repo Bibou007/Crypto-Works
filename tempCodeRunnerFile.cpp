@@ -1,3 +1,2 @@
-    crypter('CRYPTOGRAPHIE','1');
-    crypter('CRYPTOLOGIE','1');
-    crypter('CRYPT ANALYSE','100');
+ // for (int i = 0; i < key_table.size(); i++)
+        // {

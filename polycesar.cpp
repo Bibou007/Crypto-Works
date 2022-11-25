@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-
+#include <vector>
 using namespace std;
 
 // Prototype e la fonction de Cryptage
@@ -14,60 +14,90 @@ string decrypter(string, int);
 
 int main()
 {
-    char letter;
-    int key=0;
-    string cipher="",line;
-    string text="";
-    // Nom du fichier 
-    string filename="plaintext.txt"; 
+    string letter;
+    // Déclarons un vecteur qui est un tableau dynamique à remplir au fur et à mesure pour récuperer tous les décalages calcule
+    vector<int> key_table;
+// La variable i pour 
+    int i = 0;
+    // key, une variable de type int permettant de calculer e décalage entre un caractère et la première lettre de l'alphabet
+    int key = 0;
+    // cipher est le texte chiffré
+    string cipher = "", line;
+    // final_cipher est le texte finale chiffré
+    string final_cipher = "";
+    // text est le text lut dans le fichier
+    string text = "";
+    // Nom du fichier
+    string filename = "plaintext.txt";
 
     cout << "Veuillez insérer la clé:" << endl;
     cin >> letter;
 
-    // Calcul du Décalage obtenu
-if(isupper(letter)){
- key = letter - 'A';
-} else if(islower(letter)){
-     key = letter - 'a';
-}
-   
-    // Ouverture du fichier 
+    // Ouverture du fichier
 
-    ifstream in(filename.c_str(),ios::in);
+    ifstream in(filename.c_str(), ios::in);
 
     // Vérifier si le fichier est ouvert et renvoyer un message d'erreure sinon
 
-    if(!in.is_open()){
-        cout<<"ERREUR: Ouverture impossible"<<filename <<endl;
+    if (!in.is_open())
+    {
+        cout << "ERREUR: Ouverture impossible" << filename << endl;
         return 0;
     }
     // Lecture du texte dans le fichier
     // On procèdera ligne par ligne
 
-    while (!in.eof()){
-        getline(in, line,'\n');
+    while (!in.eof())
+    {
+        getline(in, line, '\n');
 
-        if(in){
-            text=text + line +"\n";
+        if (in)
+        {
+            text = text + line + "\n";
         }
     }
     in.close();
 
-    // Chiffrer à présent un texte en appelant la fonction de cryptage de césar
+    // Calcul du Décalage obtenu
 
-    cipher= crypter(text, key);
+    for (int i = 0; i < letter.length(); i++)
+    {
+
+        if (isupper(letter[i]))
+        {
+            key = letter[i] - 'A';
+            // Insertion de la valeur issue de la différence entre le caractère et la première lettre de l'alphabet dans le vecteur key_table grace à la methode insert
+            key_table.insert(key_table.end(), 1, key);
+        }
+        else if (islower(letter[i]))
+        {
+            key = letter[i] - 'a';
+
+            key_table.push_back(key);
+        }
+    }
+
+    while (final_cipher.length() < text.length())
+    {
+        cipher = crypter(text, key_table[i % key_table.size()]);
+
+        final_cipher.insert(final_cipher.end(), 1, cipher[i]);
+
+        i++;
+    }
+
+    // Chiffrer à présent un texte en appelant la fonction de cryptage de césar
 
     // Affichage du résultat obtenu après avoir chiffré le texte
 
-    cout<<"Plain Text:";
-    cout<<text<<endl;
-    cout<<"Cipher Text:";
-    cout<<cipher<<endl;
-
+    cout << "Le Message du fichier est:";
+    cout << text << endl;
+    cout << "Le Message chiffré est:";
+    cout << final_cipher << endl;
 
     return 0;
 }
-
+// Implémentons la fonction pour crypter un message
 string crypter(string text, int key)
 {
 
@@ -92,7 +122,7 @@ string crypter(string text, int key)
             // Appliquer l'algorithme de cesar
             int x = c - 'a' + key;
 
-            // SI le x est plus grand que la norme (90) faire un modulo 26 pour le ramerner à la normale
+            // Si le x est plus grand que la norme (90) faire un modulo 26 pour le ramerner à la normale
 
             x = x % 26;
 
@@ -104,7 +134,7 @@ string crypter(string text, int key)
     // cout << cipher << endl;
     return cipher;
 }
-
+// Implémentons la fonction pour décrypter un message
 string decrypter(string text, int key)
 {
     string plain = "";
@@ -117,7 +147,7 @@ string decrypter(string text, int key)
         if (isupper(c))
         {
 
-            // Appliquer l'algorithme de César en inversant pour pouvoir décrypter
+            // Appliquer l'algorithme de César en inverse pour pouvoir décrypter
             int x = c - 'A' - key;
 
             // Ramener à un nomber positive si inferieur à 0
@@ -134,7 +164,7 @@ string decrypter(string text, int key)
         else if (islower(c))
         {
 
-            // Utilisons l'algorithme de cryptage de César
+            // Utilisons l'algorithme de cryptage de César mais en inverse
 
             int x = c - 'a' - key;
 
@@ -153,6 +183,5 @@ string decrypter(string text, int key)
         plain.insert(plain.end(), 1, c);
     }
 
-    // cout << plain << endl;
     return plain;
 }

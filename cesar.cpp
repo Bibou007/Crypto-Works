@@ -15,46 +15,40 @@ string decrypter(string, int);
 int main()
 {
     char letter;
-    int key = 0;
-    string cipher = "", line;
-    string text = "";
-    // Nom du fichier
-    string filename = "plaintext.txt";
+    int key=0;
+    string cipher="",line;
+    string text="";
+    // Nom du fichier 
+    string filename="plaintext.txt"; 
 
     cout << "Veuillez insérer la clé:" << endl;
     cin >> letter;
-cout<<int(letter)<<endl;
+
     // Calcul du Décalage obtenu
-    if (isupper(letter))
-    {
-        key = letter - 'A';
-    }
-    else if (islower(letter))
-    {
-        key = letter - 'a';
-    }
+if(isupper(letter)){
+ key = letter - 'A';
+} else if(islower(letter)){
+     key = letter - 'a';
+}
+   
+    // Ouverture du fichier 
 
-    // Ouverture du fichier
-
-    ifstream in(filename.c_str(), ios::in);
+    ifstream in(filename.c_str(),ios::in);
 
     // Vérifier si le fichier est ouvert et renvoyer un message d'erreure sinon
 
-    if (!in.is_open())
-    {
-        cout << "ERREUR: Ouverture impossible" << filename << endl;
+    if(!in.is_open()){
+        cout<<"ERREUR: Ouverture impossible"<<filename <<endl;
         return 0;
     }
     // Lecture du texte dans le fichier
     // On procèdera ligne par ligne
 
-    while (!in.eof())
-    {
-        getline(in, line, '\n');
+    while (!in.eof()){
+        getline(in, line,'\n');
 
-        if (in)
-        {
-            text = text + line + "\n";
+        if(in){
+            text=text + line +"\n";
         }
     }
     in.close();
@@ -62,13 +56,14 @@ cout<<int(letter)<<endl;
     // Chiffrer à présent un texte en appelant la fonction de cryptage de césar
 
     cipher= crypter(text, key);
-    // cipher = crypter("Hello", key);
+
     // Affichage du résultat obtenu après avoir chiffré le texte
 
-    cout << "Plain Text:";
-    cout << text << endl;
-    cout << "Cipher Text:";
-    cout << cipher << endl;
+    cout<<"Plain Text:";
+    cout<<text<<endl;
+    cout<<"Cipher Text:";
+    cout<<cipher<<endl;
+
 
     return 0;
 }
@@ -158,6 +153,6 @@ string decrypter(string text, int key)
         plain.insert(plain.end(), 1, c);
     }
 
-    // cout << plain << endl;
+    cout << plain << endl;
     return plain;
 }
